@@ -4,7 +4,7 @@ import json
 import random
 import re
 from bs4 import BeautifulSoup
-from modules import shared,scripts,script_callbacks
+from modules import scripts
 current_script = os.path.realpath(__file__)
 current_folder = os.path.dirname(current_script)   
 work_basedir = os.path.dirname(current_folder)   #本插件目录  
