@@ -17,7 +17,6 @@ import modules.meta_parser
 import args_manager
 import copy
 import extensions.plugins.scripts.old_six_prompt
-
 from modules.sdxl_styles import legal_style_names
 from modules.private_logger import get_current_html_path
 from modules.ui_gradio_extensions import reload_javascript
@@ -131,11 +130,12 @@ with shared.gradio_root:
                     stop_button.click(stop_clicked, outputs=[skip_button, stop_button],
                                       queue=False, show_progress=False, _js='cancelGenerateForever')
                     skip_button.click(skip_clicked, queue=False, show_progress=False)
-                    # 添加插件的UI元素
+            # 添加插件的UI元素
             with gr.Column():
                 # 假设插件有一个按钮和一个文本框
                 plugin_button = gr.Button("插件按钮")
                 plugin_text_output = gr.Textbox(label="插件输出")
+                
             with gr.Row(elem_classes='advanced_check_row'):
                 input_image_checkbox = gr.Checkbox(label='Input Image', value=False, container=False, elem_classes='min_check')
                 advanced_checkbox = gr.Checkbox(label='Advanced', value=modules.config.default_advanced_checkbox, container=False, elem_classes='min_check')
@@ -593,6 +593,18 @@ with shared.gradio_root:
 
         desc_btn.click(trigger_describe, inputs=[desc_method, desc_input_image],
                        outputs=[prompt, style_selections], show_progress=True, queue=True)
+        
+        # dump_default_english_config()
+        def plugin_button_handler():
+         # 调用插件的函数
+          output_text = old_six_prompt.some_function()
+          return output_text
+        
+    plugin_button.click(plugin_button_handler, outputs=[plugin_text_output])
+
+                    
+                       
+
 
 
 def dump_default_english_config():
@@ -601,12 +613,6 @@ def dump_default_english_config():
 
 
 # dump_default_english_config()
-def plugin_button_handler():
-    # 调用插件的函数
-    output_text = old_six_prompt.some_function()
-    return output_text
-
-plugin_button.click(plugin_button_handler, outputs=[plugin_text_output])
 
 shared.gradio_root.launch(
     inbrowser=args_manager.args.in_browser,
