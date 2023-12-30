@@ -7,6 +7,16 @@ from bs4 import BeautifulSoup
 
 listdynamice = {}
 
+
+listdynamice = {}
+
+class Script:
+    def __init__(self):
+        pass
+
+    
+
+
 def loadjsonfiles(path, dic):
     files = os.listdir(path)
     for item in files:
