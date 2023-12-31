@@ -109,7 +109,7 @@ class Script(scripts.Script):
        
          
         def after_component(self, component, **kwargs):
-           if component.elem_id == "positive_prompt":
+           if component.elem_id == "prompt":
                self.txtprompt = component  # 将插件的文本框与WebUI的正面提示词文本框关联
            elif component.elem_id == "negative_prompt":
                self.txtnegativeprompt = component  # 假设您想关联负面提示词文本框
@@ -122,6 +122,7 @@ class Script(scripts.Script):
                 return scripts.AlwaysVisible
        
         def ui(self, is_img2img):
+          
             if(is_img2img):
                 eid='oldsix-prompt2'
                 tid='oldsix-area2'
@@ -132,8 +133,10 @@ class Script(scripts.Script):
                 
             with gr.Row(elem_id=eid):
                        with gr.Accordion(label="SixGod_K提示词 v1.65.1",open=False):
+                         
                     
-                            
+                             # 新增加的文本框
+                             main_textarea = gr.TextArea(label='提示词文本框（插件生成提示词可以在这里复制）', interactive=True, lines=10)
                              textarea=gr.TextArea(self.json,elem_id=tid,visible=False)
                              traninput=gr.Textbox(elem_classes="old-six-traninput",visible=True,show_label="",placeholder="输入中文后按回车翻译,[ALT+Q]键呼出/隐藏")
                              tcache=gr.Textbox(elem_classes="old-six-tcache",visible=True)
@@ -162,8 +165,22 @@ class Script(scripts.Script):
                                          gr.Button('分类组合随机',variant="primary",elem_classes="btn-crandom") 
                                     with gr.Column(scale=4):  
                                          btnsend=gr.Button('发送到提示词框',variant="primary",elem_classes="oldsix-btnSend") 
+                            
                                         
             
+             # 确保所有文本框相关操作也更新到 main_textarea
+            def update_main_textarea(*args):
+            # 这里可以根据需要调整，以确保所有相关内容都被导入到 main_textarea
+               combined_text = "\n".join([str(arg) for arg in args if arg])
+               return combined_text
+
+            # “发送到提示词框”按钮的点击事件处理函数
+            def send_to_main_textarea(rd_en, rd_zh):
+            # 组合 rd_en 和 rd_zh 的内容
+                combined_content = rd_en + "\n" + rd_zh
+            # 更新主文本框
+                return combined_content
+
             def tanslatePromp(text):
                 en=tanslate(text)
                 data={
@@ -189,12 +206,24 @@ class Script(scripts.Script):
             chDynamic.select(fn=CheckboxChange,inputs=chDynamic,outputs=chDynamic,show_progress=False)   
             traninput.submit(fn=tanslatePromp, inputs=traninput,outputs=[tcache,traninput]
                             ).then(fn=None,_js="translateText",show_progress=False,inputs=tcache)
-             
+            # 绑定按钮点击事件
+            btnsend.click(fn=send_to_main_textarea, 
+                      inputs=[rdtextareaEn, rdtextareaZh], 
+                      outputs=main_textarea)
+
+            
+
+        
+
+        
+
+           
+
             # tcache.change(fn=lambda:, inputs=tcache,outputs=tcache)
         
                                                                                                                     
             return [btnreload]
-           
+         
      
 
         def before_process(self, p, *args):       
