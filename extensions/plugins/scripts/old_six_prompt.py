@@ -132,7 +132,7 @@ class Script(scripts.Script):
                 
                 
             with gr.Row(elem_id=eid):
-                       with gr.Accordion(label="SixGod_K提示词 v1.65.1",open=False):
+                       with gr.Accordion(label="随机一下好嘛♥",open=False):
                          
                     
                              # 新增加的文本框
@@ -143,9 +143,9 @@ class Script(scripts.Script):
                             
                              with gr.Column(scale=4,elem_id="oldsix-optit"):
                                 btnreload=gr.Button('🔄',elem_classes="oldsix-reload sm secondary gradio-button svelte-1ipelgc")
-                                gr.Button('清空正面提示词', variant="secondary",elem_classes="oldsix-clear")
-                                gr.Button('清空负面提示词',variant="secondary",elem_classes="oldsix-clear")
-                                chDynamic=gr.Checkbox(label="锁定【动态批次】提示词",elem_classes="oldsix-checklock",container=False,scale=1)
+                                #gr.Button('清空正面提示词', variant="secondary",elem_classes="oldsix-clear")
+                                #gr.Button('清空负面提示词',variant="secondary",elem_classes="oldsix-clear")
+                                #chDynamic=gr.Checkbox(label="锁定【动态批次】提示词",elem_classes="oldsix-checklock",container=False,scale=1)
                                 
                                
                              with gr.Column(scale=4,elem_id="oldsix-optit"):
@@ -161,8 +161,8 @@ class Script(scripts.Script):
                                 with gr.Row():
                                     with gr.Column(scale=4):
                                          btnRandom=gr.Button('随机灵感关键词',variant="primary")                                                               
-                                    with gr.Column(scale=4):  
-                                         gr.Button('分类组合随机',variant="primary",elem_classes="btn-crandom") 
+                                    #with gr.Column(scale=4):  
+                                         #gr.Button('分类组合随机',variant="primary",elem_classes="btn-crandom") 
                                     with gr.Column(scale=4):  
                                          btnsend=gr.Button('发送到提示词框',variant="primary",elem_classes="oldsix-btnSend") 
                             
@@ -203,7 +203,7 @@ class Script(scripts.Script):
             
             btnreload.click(fn=reloadData,inputs=None,outputs=textarea)  
             btnRandom.click(fn=randomPrompt,inputs=None,outputs=[rdtextareaEn,rdtextareaZh])   
-            chDynamic.select(fn=CheckboxChange,inputs=chDynamic,outputs=chDynamic,show_progress=False)   
+            #chDynamic.select(fn=CheckboxChange,inputs=chDynamic,outputs=chDynamic,show_progress=False)   
             traninput.submit(fn=tanslatePromp, inputs=traninput,outputs=[tcache,traninput]
                             ).then(fn=None,_js="translateText",show_progress=False,inputs=tcache)
             # 绑定按钮点击事件
