@@ -1,4 +1,4 @@
-﻿import gradio as gr
+import gradio as gr
 import os,json
 import json
 import random
@@ -109,8 +109,11 @@ class Script(scripts.Script):
        
          
         def after_component(self, component, **kwargs):
-           if(component.elem_id=="txt2img_prompt" or component.elem_id=="img2img_prompt"):
-               self.txtprompt=component
+           if component.elem_id == "positive_prompt":
+               self.txtprompt = component  # 将插件的文本框与WebUI的正面提示词文本框关联
+           elif component.elem_id == "negative_prompt":
+               self.txtnegativeprompt = component  # 假设您想关联负面提示词文本框
+           
                             
         def title(self):
                 return "Old_Six"
@@ -129,11 +132,11 @@ class Script(scripts.Script):
                 
             with gr.Row(elem_id=eid):
                        with gr.Accordion(label="SixGod_K提示词 v1.65.1",open=False):
-                             gr.HTML('<a class="oldsix-tips" href="https://github.com/thisjam/sd-webui-oldsix-prompt/">【使用说明书】')
+                    
                             
                              textarea=gr.TextArea(self.json,elem_id=tid,visible=False)
-                             traninput=gr.Textbox(elem_classes="old-six-traninput",visible=False,show_label="",placeholder="输入中文后按回车翻译,[ALT+Q]键呼出/隐藏")
-                             tcache=gr.Textbox(elem_classes="old-six-tcache",visible=False)
+                             traninput=gr.Textbox(elem_classes="old-six-traninput",visible=True,show_label="",placeholder="输入中文后按回车翻译,[ALT+Q]键呼出/隐藏")
+                             tcache=gr.Textbox(elem_classes="old-six-tcache",visible=True)
                             
                              with gr.Column(scale=4,elem_id="oldsix-optit"):
                                 btnreload=gr.Button('🔄',elem_classes="oldsix-reload sm secondary gradio-button svelte-1ipelgc")
@@ -145,8 +148,8 @@ class Script(scripts.Script):
                              with gr.Column(scale=4,elem_id="oldsix-optit"):
                                   gr.HTML('<p class="oldsix-classes-shop"></p>')  
                              with gr.Accordion(label="随机灵感",open=False):                               
-                                rdtextareaEn=gr.TextArea(label='英文预览框',elem_id='randomTextEn',lines=3,visible=False)
-                                rdtextareaZh=gr.TextArea(label='预览框',elem_id='randomTextZh',lines=3,interactive=False)     
+                                rdtextareaEn=gr.TextArea(label='英文预览框',elem_id='randomTextEn',lines=3,visible=True)
+                                rdtextareaZh=gr.TextArea(label='预览框',elem_id='randomTextZh',lines=3,interactive=True)     
                                 with gr.Row():       
                                      with gr.Column(scale=4):                    
                                         txtstart=gr.Textbox(placeholder='开头占位提示词',show_label=False,elem_classes="oldsix-txt-start")
