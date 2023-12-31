@@ -16,12 +16,14 @@ import modules.style_sorter as style_sorter
 import modules.meta_parser
 import args_manager
 import copy
-import extensions.plugins.scripts.old_six_prompt
+import extensions.plugins.scripts.old_six_prompt as old_six_prompt
 from modules.sdxl_styles import legal_style_names
 from modules.private_logger import get_current_html_path
 from modules.ui_gradio_extensions import reload_javascript
 from modules.auth import auth_enabled, check_auth
 
+# 假设插件需要初始化
+plugin_instance = old_six_prompt.Script()
 
 def generate_clicked(*args):
     import ldm_patched.modules.model_management as model_management
@@ -130,11 +132,13 @@ with shared.gradio_root:
                     stop_button.click(stop_clicked, outputs=[skip_button, stop_button],
                                       queue=False, show_progress=False, _js='cancelGenerateForever')
                     skip_button.click(skip_clicked, queue=False, show_progress=False)
-            # 添加插件的UI元素
-            with gr.Column():
-                # 假设插件有一个按钮和一个文本框
-                plugin_button = gr.Button("插件按钮")
-                plugin_text_output = gr.Textbox(label="插件输出")
+                   
+                          # 将插件的 UI 组件添加到布局中
+                    plugin_ui_components = plugin_instance.ui(is_img2img=False)
+                    for component in plugin_ui_components:
+                     shared.gradio_root.add(component)  # 添加插件组件
+
+
                 
             with gr.Row(elem_classes='advanced_check_row'):
                 input_image_checkbox = gr.Checkbox(label='Input Image', value=False, container=False, elem_classes='min_check')
@@ -594,13 +598,7 @@ with shared.gradio_root:
         desc_btn.click(trigger_describe, inputs=[desc_method, desc_input_image],
                        outputs=[prompt, style_selections], show_progress=True, queue=True)
         
-        # dump_default_english_config()
-        def plugin_button_handler():
-         # 调用插件的函数
-          output_text = old_six_prompt.some_function()
-          return output_text
         
-    plugin_button.click(plugin_button_handler, outputs=[plugin_text_output])
 
                     
                        
