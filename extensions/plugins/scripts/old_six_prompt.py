@@ -175,7 +175,7 @@ class Script(scripts.Script):
                return combined_text
 
             # “发送到提示词框”按钮的点击事件处理函数
-            def send_to_main_textarea(rd_en):
+            def send_to_main_textarea(rd_en, rd_zh):
             # 组合 rd_en 和 rd_zh 的内容
                 combined_content = rd_en
             # 更新主文本框
